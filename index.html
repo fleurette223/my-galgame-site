@@ -361,8 +361,9 @@
         const voicePlayer = document.getElementById('voice-player');
         const playVoiceBtn = document.getElementById('play-voice-btn');
 
-        document.querySelectorAll('.character-card').forEach(card => {
+                document.querySelectorAll('[data-char]').forEach(card => {
             card.addEventListener('click', () => {
+
                 const data = characterData[card.getAttribute('data-char')];
                 document.getElementById('modal-name').innerText = data.name;
                 document.getElementById('modal-title').innerText = data.title;
