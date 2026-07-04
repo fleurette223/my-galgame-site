@@ -313,9 +313,13 @@
         gsap.registerPlugin(ScrollTrigger);
 
         // 页面资源完全加载后的优雅退场动画
-        window.addEventListener('load', () => {
+             // 页面资源完全加载后的优雅退场动画 (加入 3 秒强制解锁机制)
+        let isLoaded = false;
+        function hideLoader() {
+            if (isLoaded) return;
+            isLoaded = true;
             gsap.to("#loader", { 
-                opacity: 0, duration: 1.0, delay: 0.6, ease: "power2.inOut", 
+                opacity: 0, duration: 1.0, ease: "power2.inOut", 
                 onComplete: () => {
                     document.getElementById('loader').style.display = 'none';
                     const tl = gsap.timeline();
@@ -325,7 +329,12 @@
                     tl.to("#bgm-btn", { opacity: 1, duration: 1, ease: "power2.out" }, 1);
                 }
             });
+        }
+        
+        window.addEventListener('load', () => {
+            setTimeout(hideLoader, 600); // 正常加载完，等 0.6 秒再退场比较优雅
         });
+        setTimeout(hideLoader, 3000); // 兜底机制：最多只等 3 秒，强制拉开幕布！
 
         // 滚屏元素上浮动效自动拦截器
         gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
