@@ -18,12 +18,13 @@
             padding: 0;
         }
 
+        /* 游戏CG全局固定背景层 */
         .hero-bg {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background-image: url('bg.jpg');
             background-size: cover; background-position: center;
-            z-index: -1; filter: brightness(0.6); transform: scale(1.08); 
+            z-index: -1; filter: brightness(0.55); transform: scale(1.08); 
         }
 
         @media (max-width: 768px) {
@@ -45,7 +46,7 @@
             transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255, 255, 255, 0.15);
         }
 
-        /* 加载界面 */
+        /* 优雅的加载界面 */
         #loader {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #000000; z-index: 9999;
@@ -63,12 +64,13 @@
 
         /* 卡片微动效 */
         .hover-card {
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border 0.3s ease;
             cursor: pointer;
         }
         .hover-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 40px rgba(255,255,255,0.1);
+            transform: translateY(-6px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.08);
         }
 
         /* 音乐播放图标旋转动画 */
@@ -78,34 +80,32 @@
         /* 音乐按钮呼吸提示 */
         .pulse-ring { animation: pulseRing 2s infinite cubic-bezier(0.215, 0.61, 0.355, 1); }
         @keyframes pulseRing {
-            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); }
+            70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
         }
     </style>
 </head>
-<body class="antialiased">
-
-    <audio id="bgm-player" loop>
-        <source src="bgm.mp3" type="audio/mpeg">
-    </audio>
+<body class="antialiased select-none"> <audio id="bgm-player" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
     <audio id="voice-player"></audio>
 
     <div id="loader"><div class="loader-text">Now Loading...</div></div>
+    
     <div class="hero-bg" id="bg-image"></div>
 
-    <button id="bgm-btn" class="fixed bottom-6 right-6 z-40 glass-panel p-4 rounded-full text-white/70 hover:text-white transition-all opacity-0 pulse-ring shadow-lg">
+    <button id="bgm-btn" class="fixed bottom-6 right-6 z-40 glass-panel p-4 rounded-full text-white/70 hover:text-white transition-all opacity-0 pulse-ring shadow-2xl">
         <svg id="bgm-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
     </button>
 
     <nav class="fixed top-0 w-full z-40 glass-panel border-b-0 py-4 px-6 md:px-10 flex justify-between items-center opacity-0" id="navbar" style="transform: translateY(-20px);">
-        <div class="text-base md:text-lg font-bold tracking-widest">STUDIO NAME</div>
+        <div class="text-sm md:text-base font-bold tracking-widest">STUDIO NAME</div>
         <div class="space-x-3 md:space-x-6 text-xs md:text-sm tracking-widest flex flex-wrap">
-            <a href="#about" class="hover:text-gray-400 transition-colors hidden md:inline-block">世界观</a>
+            <a href="#about" class="hover:text-gray-400 transition-colors">世界观</a>
             <a href="#characters" class="hover:text-gray-400 transition-colors">角色</a>
             <a href="#gallery" class="hover:text-gray-400 transition-colors">画廊</a>
-            <a href="#staff" class="hover:text-gray-400 transition-colors hidden md:inline-block">制作组</a>
-            <a href="#download" class="hover:text-gray-400 transition-colors">下载</a>
+            <a href="#staff" class="hover:text-gray-400 transition-colors hidden sm:inline-block">制作组</a>
+            <a href="#donate" class="hover:text-gray-400 transition-colors">支持</a>
+            <a href="#download" class="hover:text-gray-400 transition-colors font-bold text-white">下载</a>
         </div>
     </nav>
 
@@ -153,7 +153,7 @@
     </section>
 
     <section id="gallery" class="py-24 px-4 max-w-6xl mx-auto relative z-10">
-        <h2 class="text-2xl md:text-3xl font-bold mb-16 text-center tracking-widest gs-reveal">Gallery / 鉴赏</h2>
+        <h2 class="text-2xl md:text-3xl font-bold mb-16 text-center tracking-widest gs-reveal">Gallery / 画面鉴赏</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="glass-panel hover-card h-48 md:h-64 rounded-xl overflow-hidden gs-reveal relative group cg-item" data-src="cg-1.jpg">
                 <div class="w-full h-full bg-white/5 flex items-center justify-center text-gray-500 text-sm tracking-widest group-hover:scale-105 transition duration-700">CG 01 占位</div>
@@ -174,25 +174,25 @@
         <h2 class="text-2xl md:text-3xl font-bold mb-16 text-center tracking-widest gs-reveal">System / 游戏情报</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center gs-reveal">
             <div class="glass-panel p-6 rounded-2xl">
-                <p class="text-3xl font-bold mb-2">15<span class="text-lg">w+</span></p>
+                <p class="text-2xl md:text-3xl font-bold mb-2">15<span class="text-lg">w+</span></p>
                 <p class="text-xs text-gray-400 tracking-widest">剧本字数</p>
             </div>
             <div class="glass-panel p-6 rounded-2xl">
-                <p class="text-3xl font-bold mb-2">3</p>
+                <p class="text-2xl md:text-3xl font-bold mb-2">3</p>
                 <p class="text-xs text-gray-400 tracking-widest">可攻略路线</p>
             </div>
             <div class="glass-panel p-6 rounded-2xl">
-                <p class="text-3xl font-bold mb-2">20<span class="text-lg">+</span></p>
+                <p class="text-2xl md:text-3xl font-bold mb-2">20<span class="text-lg">+</span></p>
                 <p class="text-xs text-gray-400 tracking-widest">精美剧情CG</p>
             </div>
             <div class="glass-panel p-6 rounded-2xl">
-                <p class="text-3xl font-bold mb-2">10<span class="text-lg">h</span></p>
+                <p class="text-2xl md:text-3xl font-bold mb-2">10<span class="text-lg">h</span></p>
                 <p class="text-xs text-gray-400 tracking-widest">预计游玩时长</p>
             </div>
         </div>
     </section>
 
-    <section id="staff" class="py-24 px-4 max-w-4xl mx-auto relative z-10 border-t border-white/5 mt-10">
+    <section id="staff" class="py-24 px-4 max-w-4xl mx-auto relative z-10 border-t border-white/5">
         <h2 class="text-2xl md:text-3xl font-bold mb-16 text-center tracking-widest gs-reveal">Staff / 制作者名单</h2>
         <div class="glass-panel rounded-2xl p-8 md:p-12 gs-reveal">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-12 text-center md:text-left">
@@ -205,48 +205,57 @@
                     <p class="text-lg font-bold tracking-wider">画师 A</p>
                 </div>
                 <div class="border-b border-white/10 pb-4">
-                    <h4 class="text-xs text-gray-500 tracking-widest mb-2 font-light">背景美术 / 场景</h4>
-                    <p class="text-lg font-bold tracking-wider">画师 B</p>
-                </div>
-                <div class="border-b border-white/10 pb-4">
                     <h4 class="text-xs text-gray-500 tracking-widest mb-2 font-light">音乐 / 音效</h4>
                     <p class="text-lg font-bold tracking-wider">音乐人 C</p>
                 </div>
                 <div class="border-b border-white/10 pb-4">
                     <h4 class="text-xs text-gray-500 tracking-widest mb-2 font-light">程序 / UI设计</h4>
-                    <p class="text-lg font-bold tracking-wider">樱花不及伊蕾娜</p>
-                </div>
-                <div class="border-b border-white/10 pb-4">
-                    <h4 class="text-xs text-gray-500 tracking-widest mb-2 font-light">特别鸣谢</h4>
-                    <p class="text-lg font-bold tracking-wider">所有支持企划的玩家</p>
+                    <p class="text-lg font-bold tracking-wider">你的名字</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="download" class="py-24 px-4 flex justify-center items-center relative z-10">
-        <div class="glass-panel rounded-3xl p-10 md:p-12 text-center max-w-2xl w-full gs-reveal border border-white/10 shadow-[0_0_50px_rgba(255,255,255,0.05)]">
+    <section id="donate" class="py-24 px-4 max-w-4xl mx-auto relative z-10 border-t border-white/5">
+        <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center tracking-widest gs-reveal">Donate / 赞赏支持</h2>
+        <p class="text-gray-400 mb-12 text-center text-xs md:text-sm font-light leading-relaxed gs-reveal">
+            如果喜欢我们的作品，欢迎赞赏支持。所有资金将全额用于网站域名续费及游戏质量提升。
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-2xl mx-auto gs-reveal">
+            <div class="glass-panel rounded-2xl p-6 text-center flex flex-col items-center justify-center">
+                <div class="w-44 h-44 bg-white/5 border border-white/10 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+                    <img src="wechat.jpg" alt="微信赞赏" class="w-full h-full object-cover onError-hide" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <span class="text-gray-500 text-xs hidden p-4 tracking-wider">微信收款码区域</span>
+                </div>
+                <p class="text-sm font-light tracking-widest text-emerald-400">微信支付</p>
+            </div>
+            <div class="glass-panel rounded-2xl p-6 text-center flex flex-col items-center justify-center">
+                <div class="w-44 h-44 bg-white/5 border border-white/10 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+                    <img src="alipay.jpg" alt="支付宝赞赏" class="w-full h-full object-cover onError-hide" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <span class="text-gray-500 text-xs hidden p-4 tracking-wider">支付宝收款码区域</span>
+                </div>
+                <p class="text-sm font-light tracking-widest text-sky-400">支付宝支付</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="py-24 px-4 flex justify-center items-center relative z-10 border-t border-white/5">
+        <div class="glass-panel rounded-3xl p-10 md:p-12 text-center max-w-2xl w-full gs-reveal shadow-[0_0_50px_rgba(255,255,255,0.03)]">
             <h2 class="text-2xl md:text-3xl font-bold mb-6 tracking-widest">Download / 获取游戏</h2>
-            <p class="text-gray-400 mb-8 text-sm font-light">全年龄奇幻视觉小说。推荐配置：Windows 10, 4GB RAM。</p>
+            <p class="text-gray-400 mb-8 text-sm font-light">全年龄向奇幻视觉小说。推荐配置：Windows 10, 4GB RAM。</p>
             <a href="#" class="inline-block bg-white text-gray-950 font-bold px-12 py-4 rounded-full text-sm tracking-widest transition duration-500 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]">前往 itch.io 下载</a>
             <p class="mt-6 text-xs text-gray-500">Ver 1.0.0 | 大小: 约 800MB</p>
         </div>
     </section>
 
-    <section id="contact" class="py-16 px-4 relative z-10 border-t border-white/5 mt-10">
+    <section id="contact" class="py-16 px-4 relative z-10 border-t border-white/5">
         <div class="max-w-xl mx-auto text-center gs-reveal">
             <h2 class="text-xl font-bold mb-6 tracking-widest">Contact / 联系我们</h2>
-            <p class="text-gray-400 mb-8 text-xs md:text-sm font-light leading-relaxed">
-                如果您对游戏有任何建议、同人创作，或遇到了 Bug，<br>欢迎通过以下方式与我们取得联系。
-            </p>
             <div class="flex justify-center space-x-6">
                 <a href="mailto:your_email@example.com" class="glass-panel p-4 rounded-full hover:bg-white hover:text-black transition-all duration-300" title="发送邮件">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 </a>
-                <a href="#" class="glass-panel p-4 rounded-full hover:bg-white hover:text-black transition-all duration-300" title="官方 Twitter">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
-                </a>
-                <a href="#" class="glass-panel px-6 py-4 rounded-full hover:bg-white hover:text-black transition-all duration-300 text-sm font-bold flex items-center justify-center tracking-widest" title="官方 Bilibili">
+                <a href="#" class="glass-panel px-5 py-3 rounded-full hover:bg-white hover:text-black transition-all duration-300 text-xs font-bold flex items-center justify-center tracking-widest" title="官方 Bilibili">
                     BiliBili
                 </a>
             </div>
@@ -262,10 +271,9 @@
         <div id="modal-content" class="glass-panel relative w-full max-w-2xl rounded-2xl p-8 md:p-12 transform scale-95 opacity-0">
             <button id="close-modal" class="absolute top-4 right-6 text-gray-400 hover:text-white text-3xl transition-colors font-sans">&times;</button>
             <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
-                <div class="w-48 h-64 bg-white/5 rounded-xl flex-shrink-0 flex items-center justify-center border border-white/10">立绘</div>
+                <div class="w-48 h-64 bg-white/5 rounded-xl flex-shrink-0 flex items-center justify-center border border-white/10 text-gray-500 text-xs tracking-widest">立绘区域</div>
                 <div class="flex-1 text-left w-full">
                     <h3 id="modal-name" class="text-3xl font-bold mb-2 tracking-widest">角色名</h3>
-                    
                     <div class="flex items-center gap-4 mb-6">
                         <p id="modal-title" class="text-sm text-gray-400 font-light m-0">称号 / CV</p>
                         <button id="play-voice-btn" class="hidden flex items-center gap-2 text-xs border border-white/20 px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-all">
@@ -273,7 +281,6 @@
                             试听语音
                         </button>
                     </div>
-
                     <p id="modal-desc" class="text-gray-300 leading-loose text-sm font-light text-justify">介绍...</p>
                 </div>
             </div>
@@ -282,19 +289,30 @@
 
     <div id="lightbox" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
         <div id="lightbox-bg" class="absolute inset-0 bg-black/95 backdrop-blur-sm opacity-0 cursor-pointer"></div>
-        <img id="lightbox-img" src="" class="relative max-w-full max-h-[90vh] rounded shadow-2xl opacity-0 transform scale-95">
+        <img id="lightbox-img" src="" class="relative max-w-full max-h-[90vh] rounded shadow-2xl opacity-0 transform scale-95 transition-transform duration-300">
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
     <script>
+        // 【安全核心限制】禁止右键及常见抓包快捷键
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 85 || e.keyCode === 117) || e.keyCode === 123) {
+                e.preventDefault();
+            }
+        });
+
+        // 初始化全局平滑阻尼滚动 Lenis
         const lenis = new Lenis({ duration: 1.4, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
         gsap.registerPlugin(ScrollTrigger);
 
+        // 页面资源完全加载后的优雅退场动画
         window.addEventListener('load', () => {
             gsap.to("#loader", { 
                 opacity: 0, duration: 1.0, delay: 0.6, ease: "power2.inOut", 
@@ -309,6 +327,7 @@
             });
         });
 
+        // 滚屏元素上浮动效自动拦截器
         gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
             gsap.fromTo(elem, { y: 40, opacity: 0 }, {
                 scrollTrigger: { trigger: elem, start: "top 88%", toggleActions: "play none none reverse" },
@@ -316,7 +335,7 @@
             });
         });
 
-        // BGM 播放器逻辑
+        // ================= 极简 BGM 控制台模块 =================
         const bgmPlayer = document.getElementById('bgm-player');
         const bgmBtn = document.getElementById('bgm-btn');
         const bgmIcon = document.getElementById('bgm-icon');
@@ -328,28 +347,28 @@
                 bgmIcon.classList.remove('spin-slow');
                 bgmBtn.classList.add('pulse-ring'); 
             } else {
-                bgmPlayer.play();
+                bgmPlayer.play().catch(err => console.log("等待交互后播放音乐"));
                 bgmIcon.classList.add('spin-slow');
                 bgmBtn.classList.remove('pulse-ring'); 
             }
             isPlaying = !isPlaying;
         });
 
-        // 角色库与语音逻辑
+        // ================= 角色数据库与详情弹窗交互逻辑（修复选择器Bug） =================
         const characterData = {
             'char-1': {
-                name: '灰之魔女', title: 'CV: 未知 / 属性: 自由、随性',
-                desc: '一位喜欢漫无目的旅行的魔女。遇到各种各样的人，见证各种各样的离别。对她来说，旅行本身就是意义。不拘小节，但偶尔会展现出惊人的魔法实力。',
+                name: '灰之魔女', title: 'CV: 本渡枫 (预设) / 属性: 自由',
+                desc: '一位喜欢漫无目的旅行的魔女。遇到各种各样的人，见证各种各样的离别。对她来说，旅行本身就是全部的意义。',
                 voiceSrc: 'voice-1.mp3' 
             },
             'char-2': {
-                name: '星尘魔女', title: 'CV: 未知 / 属性: 神秘导师',
-                desc: '拥有深不可测的魔法实力。平时虽然看起来有些不靠谱，但在关键时刻总是能给出最准确的指引。是引领旅者踏上道路的重要人物。',
+                name: '星尘魔女', title: 'CV: 茅野爱衣 (预设) / 属性: 导师',
+                desc: '拥有深不可测的魔法实力。平时虽然看起来有些慵懒，但在关键时刻总是能给出最严苛也最正确的指引。',
                 voiceSrc: '' 
             },
             'char-3': {
-                name: '炭之魔女', title: 'CV: 未知 / 属性: 努力家',
-                desc: '来自东方国家的少女，为了追寻某人的脚步而拼命学习魔法。虽然偶尔会有些执拗，但内心非常温柔，擅长使用火焰相关的术式。',
+                name: '炭之魔女', title: 'CV: 西明日香 (预设) / 属性: 努力家',
+                desc: '来自东方国度的勤奋少女。由于某些宿命的缘由而踏上魔法修习之路，有着极其执拗且不服输的刚毅性格。',
                 voiceSrc: ''
             }
         };
@@ -360,9 +379,9 @@
         const voicePlayer = document.getElementById('voice-player');
         const playVoiceBtn = document.getElementById('play-voice-btn');
 
-                document.querySelectorAll('[data-char]').forEach(card => {
+        // 使用 [data-char] 属性完美拦截点击，一举解决动画与探测冲突
+        document.querySelectorAll('[data-char]').forEach(card => {
             card.addEventListener('click', () => {
-
                 const data = characterData[card.getAttribute('data-char')];
                 document.getElementById('modal-name').innerText = data.name;
                 document.getElementById('modal-title').innerText = data.title;
@@ -401,7 +420,7 @@
         document.getElementById('close-modal').addEventListener('click', closeCharacterModal);
         modalOverlay.addEventListener('click', closeCharacterModal);
 
-        // CG 画廊全屏逻辑
+        // ================= CG Lightbox 放大模组 =================
         const lightbox = document.getElementById('lightbox');
         const lightboxBg = document.getElementById('lightbox-bg');
         const lightboxImg = document.getElementById('lightbox-img');
