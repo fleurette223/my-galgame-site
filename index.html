@@ -19,17 +19,20 @@
         }
 
         /* 游戏CG全局固定背景层 */
-        .hero-bg {
+                .hero-bg {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: url('bg.jpg');
+            /* 替换为 jsDelivr 的 GitHub 加速链接 */
+            background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/bg.jpg');
             background-size: cover; background-position: center;
             z-index: -1; filter: brightness(0.55); transform: scale(1.08); 
         }
 
         @media (max-width: 768px) {
-            .hero-bg { background-image: url('bg-mobile.jpg'); }
+            /* 手机版同样替换 */
+            .hero-bg { background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/bg-mobile.jpg'); }
         }
+
 
         /* 极致通透的毛玻璃效果 */
         .glass-panel {
