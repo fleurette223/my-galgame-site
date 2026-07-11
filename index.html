@@ -48,49 +48,46 @@
         @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); } 70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
 
         /* ================= 沉浸式 Hero 首屏特效样式 ================= */
-        .hero-title { font-size: 68px; font-weight: 700; letter-spacing: .18em; display: flex; flex-wrap: wrap; justify-content: center; gap: .18em; overflow: hidden; margin-bottom: 1.5rem; }
+        .hero { position: relative; } /* 为伪元素黑边做定位准备 */
+        .hero::before, .hero::after {
+            content: ""; position: absolute; left: 0; width: 100%; height: 120px;
+            pointer-events: none; z-index: 2;
+        }
+        .hero::before { top: 0; background: linear-gradient(to bottom, rgba(0,0,0,.65), transparent); }
+        .hero::after { bottom: 0; background: linear-gradient(to top, rgba(0,0,0,.65), transparent); }
+
+        .hero-title { font-size: 68px; font-weight: 700; letter-spacing: .18em; display: flex; flex-wrap: wrap; justify-content: center; gap: .18em; overflow: hidden; margin-bottom: 0.5rem; }
         .hero-title span { display: inline-block; opacity: 0; transform: translateY(80px); filter: blur(12px); }
-        .hero-sub { opacity: 0; transform: translateY(35px); }
-        .hero-btn { opacity: 0; transform: translateY(35px); display: inline-block; }
-        @media(max-width: 768px) { .hero-title { font-size: 36px; gap: .1em; } }
         
-        .hero-light { position: absolute; left: 50%; top: -250px; width: 900px; height: 900px; transform: translateX(-50%); background: radial-gradient(circle, rgba(255,255,255,.18), transparent 70%); pointer-events: none; mix-blend-mode: screen; animation: lightMove 8s ease-in-out infinite; }
+        .hero-copy { margin-top: 24px; font-size: 18px; line-height: 1.9; letter-spacing: .18em; color: rgba(255,255,255,.82); opacity: 0; transform: translateY(24px); max-width: 720px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .hero-sub { opacity: 0; transform: translateY(35px); margin-top: 12px; }
+        .hero-btn { opacity: 0; transform: translateY(35px); display: inline-block; margin-top: 32px; z-index: 10; }
+        
+        @media(max-width: 768px) { .hero-title { font-size: 36px; gap: .1em; } .hero-copy { font-size: 14px; margin-top: 16px; } }
+        
+        .hero-light { position: absolute; left: 50%; top: -250px; width: 900px; height: 900px; transform: translateX(-50%); background: radial-gradient(circle, rgba(255,255,255,.18), transparent 70%); pointer-events: none; mix-blend-mode: screen; animation: lightMove 8s ease-in-out infinite; z-index: 1; }
         @keyframes lightMove { 0% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-48%) scale(1.08); } 100% { transform: translateX(-50%) scale(1); } }
 
-        /* ================= 角色卡 V2：3D透视与流光特效 ================= */
-        .character-card {
-            perspective: 1200px;
-            transform-style: preserve-3d;
-            transition: transform .25s ease, box-shadow .35s ease;
-            overflow: hidden;
-            position: relative; /* 确保伪元素流光定位准确 */
+        /* SCROLL 流动指示器 */
+        .scroll-indicator {
+            position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            letter-spacing: .35em; font-size: 11px; color: rgba(255,255,255,.6); z-index: 10;
         }
-        .card-image { transition: transform .35s ease; will-change: transform; }
-        .card-light {
-            position: absolute; inset: 0; pointer-events: none; opacity: 0;
-            background: radial-gradient(circle at center, rgba(255,255,255,.28), transparent 60%);
-            mix-blend-mode: screen; transition: opacity .25s; z-index: 20;
-        }
-        .character-card:hover { box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+        .scroll-line { width: 1px; height: 42px; background: rgba(255,255,255,.35); overflow: hidden; }
+        .scroll-line span { display: block; width: 100%; height: 16px; background: #fff; transform: translateY(-16px); }
 
-        /* 卡片流光效果 */
-        .character-card::after {
-            content: ""; position: absolute; top: -120%; left: -120%; width: 60%; height: 320%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
-            transform: rotate(25deg); transition: .8s; pointer-events: none; z-index: 15;
-        }
+        /* ================= 角色卡 V2：3D透视与流光特效 ================= */
+        .character-card { perspective: 1200px; transform-style: preserve-3d; transition: transform .25s ease, box-shadow .35s ease; overflow: hidden; position: relative; }
+        .card-image { transition: transform .35s ease; will-change: transform; }
+        .card-light { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(circle at center, rgba(255,255,255,.28), transparent 60%); mix-blend-mode: screen; transition: opacity .25s; z-index: 20; }
+        .character-card:hover { box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+        .character-card::after { content: ""; position: absolute; top: -120%; left: -120%; width: 60%; height: 320%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent); transform: rotate(25deg); transition: .8s; pointer-events: none; z-index: 15; }
         .character-card:hover::after { left: 170%; }
 
         /* ================= Modal 电影感优化 ================= */
-        #modal-content {
-            transform-origin: center center;
-            will-change: transform, opacity, filter;
-            backface-visibility: hidden;
-        }
-        #modal-overlay {
-            backdrop-filter: blur(0px);
-            -webkit-backdrop-filter: blur(0px);
-        }
+        #modal-content { transform-origin: center center; will-change: transform, opacity, filter; backface-visibility: hidden; }
+        #modal-overlay { backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); }
     </style>
 </head>
 <body class="antialiased select-none"> 
@@ -126,17 +123,29 @@
         </div>
     </nav>
 
-    <header class="h-screen overflow-hidden flex flex-col items-center justify-center text-center px-4 relative z-10">
+    <!-- 升级版 Hero 首屏：增加 hero 类、世界观文案与滚动指示器 -->
+    <header class="hero h-screen overflow-hidden flex flex-col items-center justify-center text-center px-4 relative z-10">
         <div class="hero-light"></div>
-        <h1 class="hero-title drop-shadow-2xl text-white">
+        <h1 class="hero-title hero-logo drop-shadow-2xl text-white z-10 relative">
             <span>某</span><span>某</span><span>的</span><span>奇</span><span>幻</span><span>旅</span><span>途</span>
         </h1>
-        <p class="hero-sub hero-text text-base md:text-lg font-light tracking-widest mb-12 text-gray-300">
+        
+        <div class="hero-copy z-10 relative">
+            「当命运再次交汇，<br>我们终将在旅途的尽头重逢。」
+        </div>
+
+        <p class="hero-sub hero-text text-base md:text-lg font-light tracking-widest text-gray-300 z-10 relative">
             一段关于相遇与离别的视觉小说
         </p>
-        <a href="#download" class="hero-btn btn-elegant border border-white/30 text-white px-10 py-3 rounded-full text-sm tracking-widest backdrop-blur-sm">
+        <a href="#download" class="hero-btn btn-elegant border border-white/30 text-white px-10 py-3 rounded-full text-sm tracking-widest backdrop-blur-sm relative">
             开始旅程
         </a>
+
+        <!-- 流动 SCROLL 提示 -->
+        <div class="scroll-indicator">
+            SCROLL
+            <div class="scroll-line"><span></span></div>
+        </div>
     </header>
 
     <section id="about" class="min-h-screen flex items-center justify-center py-24 px-4 relative z-10">
@@ -149,11 +158,9 @@
         </div>
     </section>
 
-    <!-- 角色卡 FLIP 升级区域 -->
     <section id="characters" class="min-h-screen py-24 px-4 max-w-6xl mx-auto relative z-10">
         <h2 class="text-2xl md:text-3xl font-bold mb-16 text-center tracking-widest gs-reveal">Characters / 登场人物</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
             <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" id="card-1" data-char="char-1">
                 <div class="card-image absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-1.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
@@ -163,7 +170,6 @@
                 </div>
                 <div class="card-light"></div>
             </div>
-
             <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" id="card-2" data-char="char-2">
                 <div class="card-image absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-2.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
@@ -173,7 +179,6 @@
                 </div>
                 <div class="card-light"></div>
             </div>
-
             <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" id="card-3" data-char="char-3">
                 <div class="card-image absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-3.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
@@ -183,7 +188,6 @@
                 </div>
                 <div class="card-light"></div>
             </div>
-
         </div>
     </section>
 
@@ -293,7 +297,6 @@
         &copy; 2026 Your Studio Name. All rights reserved.
     </footer>
 
-    <!-- 电影级 Modal 转场目标区 (内部元素增加 class 标记便于独立动画) -->
     <div id="character-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center px-4">
         <div id="modal-overlay" class="absolute inset-0 bg-black/50 opacity-0 cursor-pointer"></div>
         <div id="modal-content" class="glass-panel relative w-full max-w-2xl rounded-2xl p-8 md:p-12 opacity-0">
@@ -356,6 +359,10 @@
             tl.to("#navbar", { opacity: 1, y: 0, duration: 0.8 }, "-=1.4");
 
             tl.to(".hero-title span", { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.8, stagger: 0.08, ease: "power3.out" }, "-=1");
+            
+            // ================= 新增：世界观文案的独立缓动入场 =================
+            tl.to(".hero-copy", { opacity: 1, y: 0, duration: 0.8 }, "-=0.4");
+            
             tl.to(".hero-sub", { opacity: 1, y: 0, duration: 0.8 }, "-=0.5");
             tl.to(".hero-btn", { opacity: 1, y: 0, duration: 0.8 }, "-=0.5");
 
@@ -364,6 +371,11 @@
 
         window.addEventListener('load', () => setTimeout(hideLoader, 600));
         setTimeout(hideLoader, 3000); 
+
+        // ================= 新增：全局氛围感呼吸动画 & 滚动流光 =================
+        gsap.to(".hero-bg", { scale: 1.03, duration: 8, repeat: -1, yoyo: true, ease: "sine.inOut" });
+        gsap.to(".hero-logo", { scale: 1.02, duration: 5, repeat: -1, yoyo: true, ease: "sine.inOut" });
+        gsap.to(".scroll-line span", { y: 30, repeat: -1, duration: 1, ease: "none" });
 
         gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
             gsap.fromTo(elem, { y: 40, opacity: 0 }, {
@@ -402,7 +414,6 @@
         const voicePlayer = document.getElementById('voice-player');
         const playVoiceBtn = document.getElementById('play-voice-btn');
 
-        // ================= 模块化：打开详情面板并触发内联动画 =================
         function openCharacter(card) {
             const data = characterData[card.getAttribute('data-char')];
             document.getElementById('modal-name').innerText = data.name;
@@ -420,28 +431,23 @@
             lenis.stop();
             modal.classList.remove('hidden');
 
-            // 柔和的背景模糊转场
             gsap.to(modalOverlay, { opacity: 1, backdropFilter: "blur(12px)", duration: 0.45 });
             
-            // 模态框主体：由糊变清，轻微放大落位
             gsap.fromTo(modalContent, 
                 { opacity: 0, scale: 0.82, filter: "blur(12px)" },
                 { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.45, ease: "power3.out" }
             );
 
-            // 内部元素的错落出场 (Staggered Entrance)
             gsap.fromTo(".modal-character", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" });
             gsap.fromTo("#modal-name", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" });
             gsap.fromTo("#modal-desc", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, delay: 0.15, ease: "power2.out" });
         }
 
-        // ================= FLIP 核心：无缝飞行转场逻辑 =================
         document.querySelectorAll('[data-char]').forEach(card => {
             card.addEventListener('click', () => {
                 const rect = card.getBoundingClientRect();
                 const clone = card.cloneNode(true);
                 
-                // 飞行体基础形态锚定
                 clone.style.position = "fixed";
                 clone.style.left = rect.left + "px";
                 clone.style.top = rect.top + "px";
@@ -451,13 +457,11 @@
                 clone.style.zIndex = "9998";
                 clone.style.pointerEvents = "none";
                 
-                // 防抖强化：剥离 3D 悬浮残留角度，避免歪着飞
                 clone.style.transform = "none";
                 if(clone.querySelector('.card-light')) clone.querySelector('.card-light').style.opacity = 0;
                 
                 document.body.appendChild(clone);
 
-                // 发射飞向屏幕正中央
                 gsap.to(clone, {
                     left: window.innerWidth / 2 - 260,
                     top: window.innerHeight / 2 - 220,
@@ -467,8 +471,8 @@
                     duration: 0.65,
                     ease: "power3.inOut",
                     onComplete() {
-                        clone.remove(); // 抵达中心后销毁替身
-                        openCharacter(card); // 无缝唤醒真身面板
+                        clone.remove();
+                        openCharacter(card); 
                     }
                 });
             });
@@ -476,7 +480,6 @@
 
         playVoiceBtn.addEventListener('click', () => { if(voicePlayer.src) { voicePlayer.currentTime = 0; voicePlayer.play(); } });
 
-        // ================= 关闭 Modal 时的丝滑退场 =================
         function closeCharacterModal() {
             voicePlayer.pause(); 
             gsap.to(modalOverlay, { opacity: 0, backdropFilter: "blur(0px)", duration: 0.3 });
@@ -520,7 +523,6 @@
             gsap.to(bg, { x, y, duration: 1.6, ease: "power2.out" });
         });
 
-        /* ================= 角色卡 V2 3D悬浮与光影追踪 JS ================= */
         document.querySelectorAll(".character-card").forEach(card => {
             const light = card.querySelector(".card-light");
             const image = card.querySelector(".card-image");
