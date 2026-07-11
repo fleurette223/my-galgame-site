@@ -19,7 +19,7 @@
         }
 
         /* 游戏CG全局固定背景层 */
-                .hero-bg {
+        .hero-bg {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             /* 替换为 jsDelivr 的 GitHub 加速链接 */
@@ -32,6 +32,93 @@
             /* 手机版同样替换 */
             .hero-bg { background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/bg-mobile.jpg'); }
         }
+
+        /* ================= GPT 电影级 Loading 样式开始 ================= */
+        #cinema-loader {
+            position: fixed;
+            inset: 0;
+            background: #050505;
+            z-index: 99999;
+            overflow: hidden;
+            clip-path: circle(140% at 50% 50%);
+            will-change: clip-path;
+        }
+
+        .loader-mask {
+            position: absolute;
+            inset: 0;
+            background: #050505;
+            transform-origin: center;
+        }
+
+        .loader-center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 340px;
+            text-align: center;
+        }
+
+        .studio-logo {
+            font-size: 38px;
+            letter-spacing: .45em;
+            font-weight: 300;
+            color: white;
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        .loader-line {
+            margin-top: 35px;
+            height: 1px;
+            background: #222;
+            overflow: hidden;
+        }
+
+        .loader-line span {
+            display: block;
+            width: 0%;
+            height: 100%;
+            background: white;
+            box-shadow: 0 0 18px white;
+        }
+
+        .loader-text {
+            margin-top: 18px;
+            font-size: 10px;
+            letter-spacing: .8em;
+            opacity: .55;
+            color: white;
+        }
+
+        .loader-flash {
+            position: absolute;
+            top: 18px;
+            left: -180%;
+            width: 120%;
+            height: 2px;
+            background: white;
+            filter: blur(7px);
+            opacity: .9;
+            transform: rotate(-8deg);
+        }
+
+        .noise {
+            position: absolute;
+            inset: 0;
+            opacity: .04;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+            background-size: 4px 4px;
+            animation: grain .2s steps(2) infinite;
+        }
+
+        @keyframes grain {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-3px, 2px); }
+        }
+        /* ================= GPT 电影级 Loading 样式结束 ================= */
 
 
         /* 极致通透的毛玻璃效果 */
@@ -47,22 +134,6 @@
         .btn-elegant:hover {
             background: rgba(255, 255, 255, 0.95); color: #000000;
             transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255, 255, 255, 0.15);
-        }
-
-        /* 优雅的加载界面 */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #000000; z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .loader-text {
-            font-family: 'Noto Serif SC', serif; font-size: 1.2rem;
-            letter-spacing: 0.6em; color: #f8fafc;
-            animation: pulse 2.5s infinite ease-in-out;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.2; transform: scale(0.98); }
-            50% { opacity: 1; transform: scale(1); }
         }
 
         /* 卡片微动效 */
@@ -89,23 +160,19 @@
         }
     </style>
 </head>
-<body class="antialiased select-none"> <audio id="bgm-player" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
+<body class="antialiased select-none"> 
+    <audio id="bgm-player" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
     <audio id="voice-player"></audio>
 
-      <!-- 进场Loading (日系高级版) -->
-    <div id="premium-loader" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center pointer-events-none">
-        <!-- 上下两块纯黑幕布 -->
-        <div id="loader-top" class="absolute top-0 left-0 w-full h-1/2 bg-[#050505]"></div>
-        <div id="loader-bottom" class="absolute bottom-0 left-0 w-full h-1/2 bg-[#050505]"></div>
-        
-        <!-- 进度条与文字区域 -->
-        <div id="loader-content" class="relative z-10 flex flex-col items-center">
-            <!-- 极简字距拉开的衬线体 -->
-            <div class="text-white/80 text-xs tracking-[0.8em] font-light mb-5 font-serif ml-2">NOW LOADING</div>
-            <!-- 纤细的发光进度条 -->
-            <div class="w-48 sm:w-64 h-[1px] bg-white/10 relative overflow-hidden">
-                <div id="loader-progress" class="absolute top-0 left-0 h-full w-0 bg-white/80 shadow-[0_0_8px_rgba(255,255,255,0.6)]"></div>
-            </div>
+    <!-- GPT 电影级 Loading HTML -->
+    <div id="cinema-loader">
+        <div class="noise"></div>
+        <div class="loader-mask"></div>
+        <div class="loader-center">
+            <div class="studio-logo">STUDIO NAME</div>
+            <div class="loader-line"><span></span></div>
+            <div class="loader-text">NOW LOADING</div>
+            <div class="loader-flash"></div>
         </div>
     </div>
   
@@ -143,10 +210,9 @@
         </div>
     </section>
 
-      <section id="characters" class="min-h-screen py-24 px-4 max-w-6xl mx-auto relative z-10">
+    <section id="characters" class="min-h-screen py-24 px-4 max-w-6xl mx-auto relative z-10">
         <h2 class="text-2xl md:text-3xl font-bold mb-16 text-center tracking-widest gs-reveal">Characters / 登场人物</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
             <div class="glass-panel hover-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-1">
                 <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-1.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
@@ -155,7 +221,6 @@
                     <p class="text-xs text-gray-400 font-light">点击查看详情与语音</p>
                 </div>
             </div>
-
             <div class="glass-panel hover-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-2">
                 <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-2.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
@@ -164,7 +229,6 @@
                     <p class="text-xs text-gray-400 font-light">点击查看详情与语音</p>
                 </div>
             </div>
-
             <div class="glass-panel hover-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-3">
                 <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-3.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
@@ -173,33 +237,30 @@
                     <p class="text-xs text-gray-400 font-light">点击查看详情与语音</p>
                 </div>
             </div>
-
         </div>
     </section>
+
     <section id="gallery" class="py-24 px-4 max-w-6xl mx-auto relative z-10">
         <h2 class="text-2xl md:text-3xl font-bold mb-16 text-center tracking-widest gs-reveal">Gallery / 画面鉴赏</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div class="glass-panel hover-card h-48 md:h-64 rounded-xl overflow-hidden gs-reveal relative group cg-item" data-src="https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/cg-1.jpg">
+            <div class="glass-panel hover-card h-48 md:h-64 rounded-xl overflow-hidden gs-reveal relative group cg-item" data-src="https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/cg-1.jpg">
                 <div class="w-full h-full bg-white/5 flex items-center justify-center text-gray-500 text-sm tracking-widest group-hover:scale-105 transition duration-700">CG 01 占位</div>
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
                 </div>
             </div>
-
             <div class="glass-panel hover-card h-48 md:h-64 rounded-xl overflow-hidden gs-reveal relative group cg-item" data-src="https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/cg-2.jpg">
                 <div class="w-full h-full bg-white/5 flex items-center justify-center text-gray-500 text-sm tracking-widest group-hover:scale-105 transition duration-700">CG 02 占位</div>
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
                 </div>
             </div>
-
             <div class="glass-panel hover-card h-48 md:h-64 rounded-xl overflow-hidden gs-reveal relative group cg-item" data-src="https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/cg-3.jpg">
                 <div class="w-full h-full bg-white/5 flex items-center justify-center text-gray-500 text-sm tracking-widest group-hover:scale-105 transition duration-700">CG 03 占位</div>
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -345,39 +406,81 @@
 
         gsap.registerPlugin(ScrollTrigger);
 
-        // 页面资源完全加载后的优雅退场动画
-             // 页面资源完全加载后的优雅退场动画 (加入 3 秒强制解锁机制)
-                // ================= 日系高级 Loading 动画逻辑 =================
+        // ================= GPT 电影级 Loading 动画逻辑 =================
         let isLoaded = false;
         function hideLoader() {
             if (isLoaded) return;
             isLoaded = true;
-            
+
             const tl = gsap.timeline();
-            
-            // 1. 细线进度条平滑拉满
-            tl.to("#loader-progress", { width: "100%", duration: 0.6, ease: "power2.inOut" });
-            
-            // 2. 文字和进度条优雅淡出
-            tl.to("#loader-content", { opacity: 0, duration: 0.4 }, "+=0.2");
-            
-            // 3. 极具电影感的“天地拉开”幕布效果 (核心高级感来源)
-            tl.to("#loader-top", { yPercent: -100, duration: 1.2, ease: "power4.inOut" }, "+=0.1");
-            tl.to("#loader-bottom", { yPercent: 100, duration: 1.2, ease: "power4.inOut" }, "<");
-            
-            // 4. 配合幕布拉开，背景图和首屏文案缓缓浮现
-            tl.to("#bg-image", { scale: 1, duration: 2.5, ease: "power2.out" }, "-=0.8");
-            tl.to("#navbar", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8");
-            tl.to(".hero-text", { y: -15, opacity: 1, duration: 1.2, stagger: 0.25, ease: "power3.out" }, "-=0.6");
-            tl.to("#bgm-btn", { opacity: 1, duration: 1, ease: "power2.out" }, "-=0.5");
-            
-            // 5. 彻底隐藏加载层，释放鼠标交互
-            tl.set("#premium-loader", { display: "none" });
+
+            tl.fromTo(".studio-logo", {
+                opacity: 0,
+                filter: "blur(15px)",
+                y: 20
+            }, {
+                opacity: 1,
+                filter: "blur(0px)",
+                y: 0,
+                duration: 1
+            });
+
+            tl.to(".loader-line span", {
+                width: "100%",
+                duration: 1.5,
+                ease: "power2.inOut"
+            }, "<0.2");
+
+            tl.to(".loader-flash", {
+                left: "160%",
+                duration: 0.7,
+                ease: "power4.out"
+            }, "-=0.2");
+
+            tl.to(".studio-logo", {
+                opacity: 0,
+                duration: 0.35
+            });
+
+            // 核心动画：全屏圆形缩放遮罩擦除效果
+            tl.to("#cinema-loader", {
+                clipPath: "circle(0% at 50% 50%)",
+                duration: 1.4,
+                ease: "power4.inOut"
+            }, "<");
+
+            tl.fromTo("#bg-image", {
+                scale: 1.18,
+                filter: "blur(24px)"
+            }, {
+                scale: 1,
+                filter: "blur(0px)",
+                duration: 2.3,
+                ease: "power2.out"
+            }, "-=1");
+
+            tl.to("#navbar", {
+                opacity: 1,
+                y: 0,
+                duration: 0.8
+            }, "-=1.4");
+
+            tl.from(".hero-text", {
+                opacity: 0,
+                y: 40,
+                stagger: 0.18,
+                duration: 1,
+                ease: "power3.out"
+            }, "-=1.2");
+
+            tl.set("#cinema-loader", {
+                display: "none"
+            });
         }
-        
-        // 依然保留 3 秒兜底极致，兼顾美观与速度
+
         window.addEventListener('load', () => setTimeout(hideLoader, 600));
         setTimeout(hideLoader, 3000); 
+        // ==============================================================
 
 
         // 滚屏元素上浮动效自动拦截器
@@ -407,7 +510,7 @@
             isPlaying = !isPlaying;
         });
 
-        // ================= 角色数据库与详情弹窗交互逻辑（修复选择器Bug） =================
+        // ================= 角色数据库与详情弹窗交互逻辑 =================
         const characterData = {
             'char-1': {
                 name: '灰之魔女', title: 'CV: 本渡枫 (预设) / 属性: 自由',
@@ -432,7 +535,6 @@
         const voicePlayer = document.getElementById('voice-player');
         const playVoiceBtn = document.getElementById('play-voice-btn');
 
-        // 使用 [data-char] 属性完美拦截点击，一举解决动画与探测冲突
         document.querySelectorAll('[data-char]').forEach(card => {
             card.addEventListener('click', () => {
                 const data = characterData[card.getAttribute('data-char')];
