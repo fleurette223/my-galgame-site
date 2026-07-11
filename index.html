@@ -50,21 +50,7 @@
         .loader-line { margin-top: 35px; height: 1px; background: #222; overflow: hidden; }
         .loader-line span { display: block; width: 0%; height: 100%; background: white; box-shadow: 0 0 18px white; }
         .loader-text { margin-top: 18px; font-size: 10px; letter-spacing: .8em; opacity: .55; color: white; }
-        
-        /* 修复后的 Flash 样式，采用 transform 防撑宽 */
-        .loader-flash { 
-            position: absolute; 
-            left: 50%; 
-            top: 18px; 
-            width: 260px; 
-            height: 2px; 
-            transform: translateX(-50%) translateX(-500px) rotate(-8deg); 
-            background: white; 
-            filter: blur(7px); 
-            pointer-events: none; 
-            opacity: .9;
-        }
-        
+        .loader-flash { position: absolute; left: 50%; top: 18px; width: 260px; height: 2px; transform: translateX(-50%) translateX(-500px) rotate(-8deg); background: white; filter: blur(7px); pointer-events: none; opacity: .9; }
         .noise { position: absolute; inset: 0; opacity: .04; pointer-events: none; background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 4px 4px; animation: grain .2s steps(2) infinite; }
         @keyframes grain { 0% { transform: translate(0, 0); } 100% { transform: translate(-3px, 2px); } }
 
@@ -80,55 +66,40 @@
         @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); } 70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
 
         /* ================= 沉浸式 Hero 首屏特效样式 ================= */
-        .hero-title {
-            font-size: 68px;
-            font-weight: 700;
-            letter-spacing: .18em;
-            display: flex;
-            flex-wrap: wrap; /* 保险：防止手机端长标题不换行被撑爆 */
-            justify-content: center;
-            gap: .18em;
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-        }
-        .hero-title span {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(80px);
-            filter: blur(12px);
-        }
-        .hero-sub {
-            opacity: 0;
-            transform: translateY(35px);
-        }
-        .hero-btn {
-            opacity: 0;
-            transform: translateY(35px);
-            display: inline-block;
-        }
-        @media(max-width: 768px) {
-            .hero-title {
-                font-size: 36px;
-                gap: .1em;
-            }
-        }
+        .hero-title { font-size: 68px; font-weight: 700; letter-spacing: .18em; display: flex; flex-wrap: wrap; justify-content: center; gap: .18em; overflow: hidden; margin-bottom: 1.5rem; }
+        .hero-title span { display: inline-block; opacity: 0; transform: translateY(80px); filter: blur(12px); }
+        .hero-sub { opacity: 0; transform: translateY(35px); }
+        .hero-btn { opacity: 0; transform: translateY(35px); display: inline-block; }
+        @media(max-width: 768px) { .hero-title { font-size: 36px; gap: .1em; } }
         
-        .hero-light {
-            position: absolute;
-            left: 50%;
-            top: -250px;
-            width: 900px;
-            height: 900px;
-            transform: translateX(-50%);
-            background: radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
-            pointer-events: none;
-            mix-blend-mode: screen;
-            animation: lightMove 8s ease-in-out infinite;
+        .hero-light { position: absolute; left: 50%; top: -250px; width: 900px; height: 900px; transform: translateX(-50%); background: radial-gradient(circle, rgba(255,255,255,.18), transparent 70%); pointer-events: none; mix-blend-mode: screen; animation: lightMove 8s ease-in-out infinite; }
+        @keyframes lightMove { 0% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-48%) scale(1.08); } 100% { transform: translateX(-50%) scale(1); } }
+
+        /* ================= 角色卡 V2：3D透视与光影特效 ================= */
+        .character-card {
+            perspective: 1200px;
+            transform-style: preserve-3d;
+            transition: transform .25s ease, box-shadow .35s ease;
+            overflow: hidden;
         }
-        @keyframes lightMove {
-            0% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-48%) scale(1.08); }
-            100% { transform: translateX(-50%) scale(1); }
+
+        .card-image {
+            transition: transform .35s ease;
+            will-change: transform;
+        }
+
+        .card-light {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,.28), transparent 60%);
+            mix-blend-mode: screen;
+            transition: opacity .25s;
+        }
+
+        .character-card:hover {
+            box-shadow: 0 30px 80px rgba(0,0,0,.45);
         }
     </style>
 </head>
@@ -136,7 +107,6 @@
     <audio id="bgm-player" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
     <audio id="voice-player"></audio>
 
-    <!-- GPT 电影级 Loading HTML -->
     <div id="cinema-loader">
         <div class="noise"></div>
         <div class="loader-mask"></div>
@@ -166,7 +136,6 @@
         </div>
     </nav>
 
-    <!-- 升级版 Hero 首屏：加入 overflow-hidden 防止光晕撑破页面 -->
     <header class="h-screen overflow-hidden flex flex-col items-center justify-center text-center px-4 relative z-10">
         <div class="hero-light"></div>
         <h1 class="hero-title drop-shadow-2xl text-white">
@@ -196,33 +165,41 @@
         </div>
     </section>
 
+    <!-- 角色卡 V2 区域 -->
     <section id="characters" class="min-h-screen py-24 px-4 max-w-6xl mx-auto relative z-10">
         <h2 class="text-2xl md:text-3xl font-bold mb-16 text-center tracking-widest gs-reveal">Characters / 登场人物</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="glass-panel hover-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-1">
-                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-1.jpg');"></div>
+            
+            <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-1">
+                <div class="card-image absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-1.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
-                <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent">
+                <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent z-10">
                     <h3 class="text-xl font-bold mb-2">灰之魔女</h3>
                     <p class="text-xs text-gray-400 font-light">点击查看详情与语音</p>
                 </div>
+                <div class="card-light"></div>
             </div>
-            <div class="glass-panel hover-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-2">
-                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-2.jpg');"></div>
+
+            <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-2">
+                <div class="card-image absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-2.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
-                <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent">
+                <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent z-10">
                     <h3 class="text-xl font-bold mb-2">星尘魔女</h3>
                     <p class="text-xs text-gray-400 font-light">点击查看详情与语音</p>
                 </div>
+                <div class="card-light"></div>
             </div>
-            <div class="glass-panel hover-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-3">
-                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-3.jpg');"></div>
+
+            <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-3">
+                <div class="card-image absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-3.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
-                <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent">
+                <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent z-10">
                     <h3 class="text-xl font-bold mb-2">炭之魔女</h3>
                     <p class="text-xs text-gray-400 font-light">点击查看详情与语音</p>
                 </div>
+                <div class="card-light"></div>
             </div>
+
         </div>
     </section>
 
@@ -399,7 +376,6 @@
 
             tl.fromTo(".studio-logo", { opacity: 0, filter: "blur(15px)", y: 20 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 1 });
             tl.to(".loader-line span", { width: "100%", duration: 1.5, ease: "power2.inOut" }, "<0.2");
-            // 使用 x 位移，彻底解决手机端撑爆屏幕的问题
             tl.to(".loader-flash", { x: 1000, duration: 0.7, ease: "power4.out" }, "-=0.2");
             tl.to(".studio-logo", { opacity: 0, duration: 0.35 });
 
@@ -408,26 +384,9 @@
             tl.fromTo("#bg-image", { scale: 1.18, filter: "blur(24px)" }, { scale: 1, filter: "blur(0px)", duration: 2.3, ease: "power2.out" }, "-=1");
             tl.to("#navbar", { opacity: 1, y: 0, duration: 0.8 }, "-=1.4");
 
-            tl.to(".hero-title span", {
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-                duration: 0.8,
-                stagger: 0.08,
-                ease: "power3.out"
-            }, "-=1");
-
-            tl.to(".hero-sub", {
-                opacity: 1,
-                y: 0,
-                duration: 0.8
-            }, "-=0.5");
-
-            tl.to(".hero-btn", {
-                opacity: 1,
-                y: 0,
-                duration: 0.8
-            }, "-=0.5");
+            tl.to(".hero-title span", { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.8, stagger: 0.08, ease: "power3.out" }, "-=1");
+            tl.to(".hero-sub", { opacity: 1, y: 0, duration: 0.8 }, "-=0.5");
+            tl.to(".hero-btn", { opacity: 1, y: 0, duration: 0.8 }, "-=0.5");
 
             tl.set("#cinema-loader", { display: "none" });
         }
@@ -530,11 +489,54 @@
         window.addEventListener("mousemove", e => {
             const x = (e.clientX / window.innerWidth - 0.5) * 18;
             const y = (e.clientY / window.innerHeight - 0.5) * 18;
-            gsap.to(bg, {
-                x,
-                y,
-                duration: 1.6,
-                ease: "power2.out"
+            gsap.to(bg, { x, y, duration: 1.6, ease: "power2.out" });
+        });
+
+        /* ================= 角色卡 V2 3D悬浮与光影追踪 JS ================= */
+        document.querySelectorAll(".character-card").forEach(card => {
+            const light = card.querySelector(".card-light");
+            const image = card.querySelector(".card-image");
+
+            card.addEventListener("mousemove", e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const rx = (y - rect.height / 2) / 15;
+                const ry = (rect.width / 2 - x) / 15;
+
+                gsap.to(card, {
+                    rotationX: -rx,
+                    rotationY: ry,
+                    duration: 0.35,
+                    ease: "power2.out"
+                });
+
+                gsap.to(image, {
+                    scale: 1.08,
+                    x: (x - rect.width / 2) / 30,
+                    y: (y - rect.height / 2) / 30,
+                    duration: 0.4
+                });
+
+                light.style.opacity = 1;
+                light.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,.35), transparent 60%)`;
+            });
+
+            card.addEventListener("mouseleave", () => {
+                gsap.to(card, {
+                    rotationX: 0,
+                    rotationY: 0,
+                    duration: 0.5
+                });
+
+                gsap.to(image, {
+                    scale: 1,
+                    x: 0,
+                    y: 0,
+                    duration: 0.5
+                });
+
+                light.style.opacity = 0;
             });
         });
 
