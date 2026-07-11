@@ -10,37 +10,19 @@
     
     <style>
         /* ================= 终极防溢出保险 ================= */
-        * {
-            box-sizing: border-box;
-        }
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
-            position: relative;
-        }
+        * { box-sizing: border-box; }
+        html, body { overflow-x: hidden; width: 100%; position: relative; }
+        body { font-family: 'Noto Serif SC', serif; background-color: #000000; color: #f8fafc; margin: 0; padding: 0; }
 
-        body {
-            font-family: 'Noto Serif SC', serif;
-            background-color: #000000;
-            color: #f8fafc;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* 游戏CG全局固定背景层 (新增鼠标视差过渡) */
+        /* 游戏CG全局固定背景层 */
         .hero-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/bg.jpg');
             background-size: cover; background-position: center;
             z-index: -1; filter: brightness(0.55); transform: scale(1.08); 
-            transition: transform .2s linear;
-            will-change: transform;
+            transition: transform .2s linear; will-change: transform;
         }
-
-        @media (max-width: 768px) {
-            .hero-bg { background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/bg-mobile.jpg'); }
-        }
+        @media (max-width: 768px) { .hero-bg { background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/bg-mobile.jpg'); } }
 
         /* ================= GPT 电影级 Loading 样式 ================= */
         #cinema-loader { position: fixed; inset: 0; background: #050505; z-index: 99999; overflow: hidden; clip-path: circle(140% at 50% 50%); will-change: clip-path; }
@@ -75,31 +57,39 @@
         .hero-light { position: absolute; left: 50%; top: -250px; width: 900px; height: 900px; transform: translateX(-50%); background: radial-gradient(circle, rgba(255,255,255,.18), transparent 70%); pointer-events: none; mix-blend-mode: screen; animation: lightMove 8s ease-in-out infinite; }
         @keyframes lightMove { 0% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-48%) scale(1.08); } 100% { transform: translateX(-50%) scale(1); } }
 
-        /* ================= 角色卡 V2：3D透视与光影特效 ================= */
+        /* ================= 角色卡 V2：3D透视与流光特效 ================= */
         .character-card {
             perspective: 1200px;
             transform-style: preserve-3d;
             transition: transform .25s ease, box-shadow .35s ease;
             overflow: hidden;
+            position: relative; /* 确保伪元素流光定位准确 */
         }
-
-        .card-image {
-            transition: transform .35s ease;
-            will-change: transform;
-        }
-
+        .card-image { transition: transform .35s ease; will-change: transform; }
         .card-light {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0;
+            position: absolute; inset: 0; pointer-events: none; opacity: 0;
             background: radial-gradient(circle at center, rgba(255,255,255,.28), transparent 60%);
-            mix-blend-mode: screen;
-            transition: opacity .25s;
+            mix-blend-mode: screen; transition: opacity .25s; z-index: 20;
         }
+        .character-card:hover { box-shadow: 0 30px 80px rgba(0,0,0,.45); }
 
-        .character-card:hover {
-            box-shadow: 0 30px 80px rgba(0,0,0,.45);
+        /* 卡片流光效果 */
+        .character-card::after {
+            content: ""; position: absolute; top: -120%; left: -120%; width: 60%; height: 320%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+            transform: rotate(25deg); transition: .8s; pointer-events: none; z-index: 15;
+        }
+        .character-card:hover::after { left: 170%; }
+
+        /* ================= Modal 电影感优化 ================= */
+        #modal-content {
+            transform-origin: center center;
+            will-change: transform, opacity, filter;
+            backface-visibility: hidden;
+        }
+        #modal-overlay {
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
         }
     </style>
 </head>
@@ -139,13 +129,7 @@
     <header class="h-screen overflow-hidden flex flex-col items-center justify-center text-center px-4 relative z-10">
         <div class="hero-light"></div>
         <h1 class="hero-title drop-shadow-2xl text-white">
-            <span>某</span>
-            <span>某</span>
-            <span>的</span>
-            <span>奇</span>
-            <span>幻</span>
-            <span>旅</span>
-            <span>途</span>
+            <span>某</span><span>某</span><span>的</span><span>奇</span><span>幻</span><span>旅</span><span>途</span>
         </h1>
         <p class="hero-sub hero-text text-base md:text-lg font-light tracking-widest mb-12 text-gray-300">
             一段关于相遇与离别的视觉小说
@@ -165,12 +149,12 @@
         </div>
     </section>
 
-    <!-- 角色卡 V2 区域 -->
+    <!-- 角色卡 FLIP 升级区域 -->
     <section id="characters" class="min-h-screen py-24 px-4 max-w-6xl mx-auto relative z-10">
         <h2 class="text-2xl md:text-3xl font-bold mb-16 text-center tracking-widest gs-reveal">Characters / 登场人物</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-1">
+            <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" id="card-1" data-char="char-1">
                 <div class="card-image absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-1.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
                 <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent z-10">
@@ -180,7 +164,7 @@
                 <div class="card-light"></div>
             </div>
 
-            <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-2">
+            <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" id="card-2" data-char="char-2">
                 <div class="card-image absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-2.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
                 <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent z-10">
@@ -190,7 +174,7 @@
                 <div class="card-light"></div>
             </div>
 
-            <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" data-char="char-3">
+            <div class="glass-panel hover-card character-card rounded-xl overflow-hidden gs-reveal h-96 group relative" id="card-3" data-char="char-3">
                 <div class="card-image absolute inset-0 bg-cover bg-center transition-transform duration-700" style="background-image: url('https://cdn.jsdelivr.net/gh/fleurette223/my-galgame-site/char-3.jpg');"></div>
                 <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition duration-500"></div>
                 <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent z-10">
@@ -305,31 +289,18 @@
         </div>
     </section>
 
-    <section id="contact" class="py-16 px-4 relative z-10 border-t border-white/5">
-        <div class="max-w-xl mx-auto text-center gs-reveal">
-            <h2 class="text-xl font-bold mb-6 tracking-widest">Contact / 联系我们</h2>
-            <div class="flex justify-center space-x-6">
-                <a href="mailto:your_email@example.com" class="glass-panel p-4 rounded-full hover:bg-white hover:text-black transition-all duration-300" title="发送邮件">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                </a>
-                <a href="#" class="glass-panel px-5 py-3 rounded-full hover:bg-white hover:text-black transition-all duration-300 text-xs font-bold flex items-center justify-center tracking-widest" title="官方 Bilibili">
-                    BiliBili
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="py-8 text-center text-xs text-gray-600 font-light tracking-wide relative z-10">
+    <footer class="py-8 text-center text-xs text-gray-600 font-light tracking-wide relative z-10 border-t border-white/5">
         &copy; 2026 Your Studio Name. All rights reserved.
     </footer>
 
+    <!-- 电影级 Modal 转场目标区 (内部元素增加 class 标记便于独立动画) -->
     <div id="character-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center px-4">
-        <div id="modal-overlay" class="absolute inset-0 bg-black/80 backdrop-blur-md opacity-0 cursor-pointer"></div>
-        <div id="modal-content" class="glass-panel relative w-full max-w-2xl rounded-2xl p-8 md:p-12 transform scale-95 opacity-0">
-            <button id="close-modal" class="absolute top-4 right-6 text-gray-400 hover:text-white text-3xl transition-colors font-sans">&times;</button>
+        <div id="modal-overlay" class="absolute inset-0 bg-black/50 opacity-0 cursor-pointer"></div>
+        <div id="modal-content" class="glass-panel relative w-full max-w-2xl rounded-2xl p-8 md:p-12 opacity-0">
+            <button id="close-modal" class="absolute top-4 right-6 text-gray-400 hover:text-white text-3xl transition-colors font-sans z-20">&times;</button>
             <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
-                <div class="w-48 h-64 bg-white/5 rounded-xl flex-shrink-0 flex items-center justify-center border border-white/10 text-gray-500 text-xs tracking-widest">立绘区域</div>
-                <div class="flex-1 text-left w-full">
+                <div class="w-48 h-64 bg-white/5 rounded-xl flex-shrink-0 flex items-center justify-center border border-white/10 text-gray-500 text-xs tracking-widest modal-character">立绘区域</div>
+                <div class="flex-1 text-left w-full relative z-10">
                     <h3 id="modal-name" class="text-3xl font-bold mb-2 tracking-widest">角色名</h3>
                     <div class="flex items-center gap-4 mb-6">
                         <p id="modal-title" class="text-sm text-gray-400 font-light m-0">称号 / CV</p>
@@ -431,34 +402,91 @@
         const voicePlayer = document.getElementById('voice-player');
         const playVoiceBtn = document.getElementById('play-voice-btn');
 
+        // ================= 模块化：打开详情面板并触发内联动画 =================
+        function openCharacter(card) {
+            const data = characterData[card.getAttribute('data-char')];
+            document.getElementById('modal-name').innerText = data.name;
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-desc').innerText = data.desc;
+            
+            if (data.voiceSrc) {
+                playVoiceBtn.classList.remove('hidden');
+                voicePlayer.src = data.voiceSrc;
+            } else {
+                playVoiceBtn.classList.add('hidden');
+                voicePlayer.src = '';
+            }
+            
+            lenis.stop();
+            modal.classList.remove('hidden');
+
+            // 柔和的背景模糊转场
+            gsap.to(modalOverlay, { opacity: 1, backdropFilter: "blur(12px)", duration: 0.45 });
+            
+            // 模态框主体：由糊变清，轻微放大落位
+            gsap.fromTo(modalContent, 
+                { opacity: 0, scale: 0.82, filter: "blur(12px)" },
+                { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.45, ease: "power3.out" }
+            );
+
+            // 内部元素的错落出场 (Staggered Entrance)
+            gsap.fromTo(".modal-character", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" });
+            gsap.fromTo("#modal-name", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" });
+            gsap.fromTo("#modal-desc", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, delay: 0.15, ease: "power2.out" });
+        }
+
+        // ================= FLIP 核心：无缝飞行转场逻辑 =================
         document.querySelectorAll('[data-char]').forEach(card => {
             card.addEventListener('click', () => {
-                const data = characterData[card.getAttribute('data-char')];
-                document.getElementById('modal-name').innerText = data.name;
-                document.getElementById('modal-title').innerText = data.title;
-                document.getElementById('modal-desc').innerText = data.desc;
+                const rect = card.getBoundingClientRect();
+                const clone = card.cloneNode(true);
                 
-                if (data.voiceSrc) {
-                    playVoiceBtn.classList.remove('hidden');
-                    voicePlayer.src = data.voiceSrc;
-                } else {
-                    playVoiceBtn.classList.add('hidden');
-                    voicePlayer.src = '';
-                }
+                // 飞行体基础形态锚定
+                clone.style.position = "fixed";
+                clone.style.left = rect.left + "px";
+                clone.style.top = rect.top + "px";
+                clone.style.width = rect.width + "px";
+                clone.style.height = rect.height + "px";
+                clone.style.margin = "0";
+                clone.style.zIndex = "9998";
+                clone.style.pointerEvents = "none";
                 
-                lenis.stop();
-                modal.classList.remove('hidden');
-                gsap.to(modalOverlay, { opacity: 1, duration: 0.4 });
-                gsap.to(modalContent, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.2)" });
+                // 防抖强化：剥离 3D 悬浮残留角度，避免歪着飞
+                clone.style.transform = "none";
+                if(clone.querySelector('.card-light')) clone.querySelector('.card-light').style.opacity = 0;
+                
+                document.body.appendChild(clone);
+
+                // 发射飞向屏幕正中央
+                gsap.to(clone, {
+                    left: window.innerWidth / 2 - 260,
+                    top: window.innerHeight / 2 - 220,
+                    width: 520,
+                    height: 440,
+                    borderRadius: "24px",
+                    duration: 0.65,
+                    ease: "power3.inOut",
+                    onComplete() {
+                        clone.remove(); // 抵达中心后销毁替身
+                        openCharacter(card); // 无缝唤醒真身面板
+                    }
+                });
             });
         });
 
         playVoiceBtn.addEventListener('click', () => { if(voicePlayer.src) { voicePlayer.currentTime = 0; voicePlayer.play(); } });
 
+        // ================= 关闭 Modal 时的丝滑退场 =================
         function closeCharacterModal() {
             voicePlayer.pause(); 
-            gsap.to(modalOverlay, { opacity: 0, duration: 0.3 });
-            gsap.to(modalContent, { opacity: 0, scale: 0.95, duration: 0.3, onComplete: () => { modal.classList.add('hidden'); lenis.start(); }});
+            gsap.to(modalOverlay, { opacity: 0, backdropFilter: "blur(0px)", duration: 0.3 });
+            gsap.to(modalContent, { 
+                opacity: 0, scale: 0.82, filter: "blur(12px)", duration: 0.3, 
+                onComplete: () => { 
+                    modal.classList.add('hidden'); 
+                    lenis.start(); 
+                }
+            });
         }
         document.getElementById('close-modal').addEventListener('click', closeCharacterModal);
         modalOverlay.addEventListener('click', closeCharacterModal);
@@ -504,38 +532,15 @@
                 const rx = (y - rect.height / 2) / 15;
                 const ry = (rect.width / 2 - x) / 15;
 
-                gsap.to(card, {
-                    rotationX: -rx,
-                    rotationY: ry,
-                    duration: 0.35,
-                    ease: "power2.out"
-                });
-
-                gsap.to(image, {
-                    scale: 1.08,
-                    x: (x - rect.width / 2) / 30,
-                    y: (y - rect.height / 2) / 30,
-                    duration: 0.4
-                });
-
+                gsap.to(card, { rotationX: -rx, rotationY: ry, duration: 0.35, ease: "power2.out" });
+                gsap.to(image, { scale: 1.08, x: (x - rect.width / 2) / 30, y: (y - rect.height / 2) / 30, duration: 0.4 });
                 light.style.opacity = 1;
                 light.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,.35), transparent 60%)`;
             });
 
             card.addEventListener("mouseleave", () => {
-                gsap.to(card, {
-                    rotationX: 0,
-                    rotationY: 0,
-                    duration: 0.5
-                });
-
-                gsap.to(image, {
-                    scale: 1,
-                    x: 0,
-                    y: 0,
-                    duration: 0.5
-                });
-
+                gsap.to(card, { rotationX: 0, rotationY: 0, duration: 0.5 });
+                gsap.to(image, { scale: 1, x: 0, y: 0, duration: 0.5 });
                 light.style.opacity = 0;
             });
         });
