@@ -9,11 +9,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
+        /* ================= 终极防溢出保险 ================= */
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+
         body {
             font-family: 'Noto Serif SC', serif;
             background-color: #000000;
             color: #f8fafc;
-            overflow-x: hidden;
             margin: 0;
             padding: 0;
         }
@@ -41,7 +50,21 @@
         .loader-line { margin-top: 35px; height: 1px; background: #222; overflow: hidden; }
         .loader-line span { display: block; width: 0%; height: 100%; background: white; box-shadow: 0 0 18px white; }
         .loader-text { margin-top: 18px; font-size: 10px; letter-spacing: .8em; opacity: .55; color: white; }
-        .loader-flash { position: absolute; top: 18px; left: -180%; width: 120%; height: 2px; background: white; filter: blur(7px); opacity: .9; transform: rotate(-8deg); }
+        
+        /* 修复后的 Flash 样式，采用 transform 防撑宽 */
+        .loader-flash { 
+            position: absolute; 
+            left: 50%; 
+            top: 18px; 
+            width: 260px; 
+            height: 2px; 
+            transform: translateX(-50%) translateX(-500px) rotate(-8deg); 
+            background: white; 
+            filter: blur(7px); 
+            pointer-events: none; 
+            opacity: .9;
+        }
+        
         .noise { position: absolute; inset: 0; opacity: .04; pointer-events: none; background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 4px 4px; animation: grain .2s steps(2) infinite; }
         @keyframes grain { 0% { transform: translate(0, 0); } 100% { transform: translate(-3px, 2px); } }
 
@@ -62,6 +85,7 @@
             font-weight: 700;
             letter-spacing: .18em;
             display: flex;
+            flex-wrap: wrap; /* 保险：防止手机端长标题不换行被撑爆 */
             justify-content: center;
             gap: .18em;
             overflow: hidden;
@@ -142,8 +166,8 @@
         </div>
     </nav>
 
-    <!-- 升级版 Hero 首屏 -->
-    <header class="h-screen flex flex-col items-center justify-center text-center px-4 relative z-10">
+    <!-- 升级版 Hero 首屏：加入 overflow-hidden 防止光晕撑破页面 -->
+    <header class="h-screen overflow-hidden flex flex-col items-center justify-center text-center px-4 relative z-10">
         <div class="hero-light"></div>
         <h1 class="hero-title drop-shadow-2xl text-white">
             <span>某</span>
@@ -375,7 +399,8 @@
 
             tl.fromTo(".studio-logo", { opacity: 0, filter: "blur(15px)", y: 20 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 1 });
             tl.to(".loader-line span", { width: "100%", duration: 1.5, ease: "power2.inOut" }, "<0.2");
-            tl.to(".loader-flash", { left: "160%", duration: 0.7, ease: "power4.out" }, "-=0.2");
+            // 使用 x 位移，彻底解决手机端撑爆屏幕的问题
+            tl.to(".loader-flash", { x: 1000, duration: 0.7, ease: "power4.out" }, "-=0.2");
             tl.to(".studio-logo", { opacity: 0, duration: 0.35 });
 
             tl.to("#cinema-loader", { clipPath: "circle(0% at 50% 50%)", duration: 1.4, ease: "power4.inOut" }, "<");
@@ -383,7 +408,6 @@
             tl.fromTo("#bg-image", { scale: 1.18, filter: "blur(24px)" }, { scale: 1, filter: "blur(0px)", duration: 2.3, ease: "power2.out" }, "-=1");
             tl.to("#navbar", { opacity: 1, y: 0, duration: 0.8 }, "-=1.4");
 
-            // ================= 新增：逐字发光模糊显现动画 =================
             tl.to(".hero-title span", {
                 opacity: 1,
                 y: 0,
@@ -502,7 +526,6 @@
         lightboxBg.addEventListener('click', closeLightbox);
         lightboxImg.addEventListener('click', closeLightbox); 
 
-        // ================= 新增：鼠标跟随的背景视差动效 =================
         const bg = document.querySelector(".hero-bg");
         window.addEventListener("mousemove", e => {
             const x = (e.clientX / window.innerWidth - 0.5) * 18;
