@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUPPORT - PROJECT: PURE WHITE</title>
+    <!-- 引入日系明朝体保持风格统一 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Serif JP', serif; 
+            background-color: #fff; 
+            color: #222;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+            height: 100vh; 
+            margin: 0; 
+            text-align: center; 
+            overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .title { 
+            font-size: 24px; 
+            letter-spacing: 8px; 
+            margin-bottom: 10px; 
+            font-weight: 300; 
+        }
+        .subtitle { 
+            font-size: 10px; 
+            color: #888; 
+            letter-spacing: 4px; 
+            margin-bottom: 40px; 
+        }
+        .qr-container { 
+            width: 220px; 
+            height: 220px; 
+            padding: 10px; 
+            border: 1px solid #eee; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
+            margin-bottom: 30px;
+        }
+        .qr-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        /* 核心文案排版优化 */
+        .tips { 
+            font-size: 13px; 
+            color: #555; 
+            letter-spacing: 2px; 
+            line-height: 2.2; 
+            max-width: 520px; /* 加宽以容纳长文案 */
+            padding: 0 25px; 
+            text-align: justify; 
+            text-align-last: center; /* 让最后一行居中，更美观 */
+        }
+        .scan-hint { 
+            font-size: 10px; 
+            color: #bbb; 
+            margin-top: 25px; 
+            letter-spacing: 1px; 
+        }
+        .back-btn { 
+            margin-top: 50px; 
+            font-size: 10px; 
+            color: #aaa; 
+            text-decoration: none; 
+            letter-spacing: 4px; 
+            transition: color 0.4s ease, letter-spacing 0.4s ease; 
+        }
+        .back-btn:hover { 
+            color: #222; 
+            letter-spacing: 8px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="title">支援</div>
+    <div class="subtitle">SUPPORT OUR JOURNEY</div>
+    
+    <div class="qr-container">
+        <!-- 👇 这里填入你的收款码图片路径，比如 qrcode.jpg 👇 -->
+        <img src="qrcode.jpg" alt="微信收款码">
+    </div>
+    
+    <div class="tips">
+        <p>本作的开发完全由独立制作组自筹资金进行。如果您喜欢这个故事，并希望能够助力我们完成后续的开发工作，请考虑对我们进行捐赠。您的每一份支持，都将成为我们在漫漫长夜中前行的光。</p>
+        
+        <!-- 操作提示缩小并弱化，不抢文案的戏 -->
+        <p class="scan-hint">* 手机端浏览请保存图片后使用微信 / 支付宝扫一扫</p>
+    </div>
+
+    <!-- 增加了稍微拉开字间距的悬停动效 -->
+    <a href="javascript:window.close();" class="back-btn">RETURN / 返回</a>
+</body>
+</html>
