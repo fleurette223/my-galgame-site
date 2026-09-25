@@ -22,7 +22,6 @@
 
 <style>
 :root{--text-color:#222;--light-text:#888;--bg-color:#ffffff;--noise-url:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")}html{scroll-behavior:smooth}*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Noto Serif JP',serif;color:var(--text-color);background-color:var(--bg-color);overflow-x:hidden;width:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.white-blur-bg{position:fixed;inset:0;background:radial-gradient(circle at 50% 50%,#fff 0,#f7f7f7 100%);animation:pulse 12s ease-in-out infinite alternate;z-index:-2}@keyframes pulse{0%{transform:scale(1);filter:blur(0px)}100%{transform:scale(1.1);filter:blur(12px)}}.noise-overlay{position:fixed;inset:0;background-image:var(--noise-url);opacity:.04;pointer-events:none;z-index:999}#js-warning{position:fixed;inset:0;background:#fff;display:none;flex-direction:column;justify-content:center;align-items:center;z-index:9999999;font-family:'Noto Serif JP',serif;font-size:14px;letter-spacing:6px;color:#888;text-align:center;line-height:2}noscript #js-warning{display:flex!important}noscript #intro-layer,noscript #main-site,noscript .noise-overlay,noscript .white-blur-bg{display:none!important}#headphone-hint{position:fixed;bottom:12%;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:4px;color:var(--light-text);opacity:0;transition:opacity 3s ease;z-index:101;pointer-events:none;white-space:nowrap}#headphone-hint.show{opacity:1}#headphone-hint.hide{opacity:0!important}.audio-control{position:fixed;bottom:30px;right:40px;font-size:10px;letter-spacing:4px;color:#aaa;cursor:pointer;z-index:900;transition:color .5s ease;opacity:0;pointer-events:none}.audio-control.visible{opacity:1;pointer-events:auto}.audio-control:hover{color:var(--text-color)}#intro-layer{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background-color:var(--bg-color);z-index:100;transition:transform 2.5s cubic-bezier(.25, 1, .3, 1),opacity 2s ease}#intro-layer.zoom-in{transform:scale(1.4);opacity:0;pointer-events:none}.vertical-text{writing-mode:vertical-rl;font-size:clamp(18px, 4vw, 24px);font-weight:300;letter-spacing:clamp(6px, 2vw, 10px);line-height:2;opacity:0;filter:blur(15px);transition:opacity 2s ease,filter 2.5s ease-out;position:relative}.vertical-text.show{opacity:1;filter:blur(0)}.particle{position:absolute;background-color:var(--text-color);border-radius:50%;pointer-events:none;transition:transform 1.5s cubic-bezier(.1, .8, .3, 1),opacity 1.5s ease-out}#main-site{opacity:0;visibility:hidden;transition:opacity 2.5s ease .5s;position:relative;z-index:10}#main-site.visible{opacity:1;visibility:visible}header{position:absolute;top:0;width:100%;padding:clamp(20px,3vh,40px) 0;display:flex;justify-content:center;flex-wrap:wrap;gap:clamp(20px,4vw,50px);background:0 0;z-index:50}header a{text-decoration:none;color:var(--light-text);font-size:11px;letter-spacing:4px;transition:color .4s ease}header a:hover{color:var(--text-color)}#hero{position:relative;height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column}.typewriter-quote{position:absolute;font-size:13px;letter-spacing:4px;color:#444;white-space:nowrap;transition:opacity 2s ease,filter 2s ease,transform 2s ease}.typewriter-quote::after{content:'|';animation:cursor-blink 1s infinite;opacity:.5;margin-left:4px;font-weight:300}.typewriter-quote.done::after{display:none}.fade-out-ink{opacity:0!important;filter:blur(8px);transform:scale(.98)}@keyframes cursor-blink{0%,100%{opacity:0}50%{opacity:.5}}.hero-main{display:flex;flex-direction:column;align-items:center;position:absolute;opacity:0;filter:blur(10px);transform:translateY(15px);transition:all 2.5s cubic-bezier(.2, .8, .2, 1);pointer-events:none}.hero-main.show{opacity:1;filter:blur(0);transform:translateY(0);pointer-events:auto}#hero .site-title{font-size:clamp(32px, 8vw, 56px);font-weight:300;letter-spacing:clamp(12px, 5vw, 24px);margin-bottom:24px;margin-right:calc(clamp(12px,5vw,24px) * -1);color:var(--text-color)}#hero .sec-subtitle{font-size:10px;color:var(--light-text);letter-spacing:6px;margin-bottom:0;text-transform:uppercase;text-align:center;margin-right:-6px;line-height:2}.audio-waveform{display:flex;gap:4px;align-items:center;justify-content:center;height:30px;margin-top:50px;opacity:.4}.audio-waveform span{display:block;width:1px;background:#888;border-radius:2px;animation:wave-breath 1.2s infinite ease-in-out alternate;animation-play-state:paused}.audio-waveform.playing span{animation-play-state:running}.audio-waveform span:nth-child(1){height:8px;animation-delay:0ms}.audio-waveform span:nth-child(2){height:18px;animation-delay:-.2s}.audio-waveform span:nth-child(3){height:10px;animation-delay:-.4s}.audio-waveform span:nth-child(4){height:26px;animation-delay:-.6s}.audio-waveform span:nth-child(5){height:14px;animation-delay:-.8s}.audio-waveform span:nth-child(6){height:20px;animation-delay:-1s}.audio-waveform span:nth-child(7){height:12px;animation-delay:-1.2s}@keyframes wave-breath{0%{transform:scaleY(.3)}100%{transform:scaleY(1.4)}}section:not(#hero){min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:100px 20px;text-align:center}.reveal{opacity:0;transform:translateY(30px);filter:blur(5px);transition:all 1.5s cubic-bezier(.25, 1, .3, 1)}.reveal.active{opacity:1;transform:translateY(0);filter:blur(0)}.sec-title{font-size:clamp(24px, 5vw, 36px);font-weight:300;letter-spacing:clamp(8px, 3vw, 16px);margin-bottom:10px;margin-right:calc(clamp(8px,3vw,16px) * -1)}.sec-subtitle{font-size:10px;color:var(--light-text);letter-spacing:6px;margin-bottom:60px;text-transform:uppercase}.story-text{max-width:600px;font-size:14px;line-height:2.5;letter-spacing:2px;color:#444;text-align:justify}.timeline{position:relative;max-width:500px;margin:0 auto;width:100%;padding-top:20px}.timeline::before{content:'';position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:1px;background-color:#eaeaea;z-index:0}.timeline-item{position:relative;display:flex;flex-direction:column;align-items:center;margin-bottom:50px;z-index:1}.timeline-item:last-child{margin-bottom:0}.time-dot{width:10px;height:10px;background-color:var(--bg-color);border:1.5px solid var(--text-color);border-radius:50%;margin-bottom:16px;transition:background-color .4s ease}.timeline-item:hover .time-dot{background-color:var(--text-color)}.time-date{font-size:11px;letter-spacing:4px;color:var(--light-text);margin-bottom:8px;font-family:sans-serif}.time-desc{font-size:14px;letter-spacing:3px;color:#333;line-height:1.8}.time-status{font-size:9px;letter-spacing:2px;color:#aaa;margin-top:8px;border:1px solid #f0f0f0;padding:3px 10px;border-radius:12px;text-transform:uppercase}.status-done{color:#888;border-color:#ddd}.staff-list{display:flex;flex-direction:column;gap:35px;max-width:700px;margin:0 auto}.staff-item{display:flex;flex-direction:column;align-items:center;gap:10px}.staff-role{font-size:10px;color:var(--light-text);letter-spacing:4px;text-align:center}.staff-name{font-size:15px;letter-spacing:4px;text-align:center;line-height:2}.support-text{font-size:13px;line-height:2;color:#555;margin-bottom:50px;max-width:500px}.btn-donate{display:inline-flex;align-items:center;background:0 0;border:none;color:var(--text-color);font-size:12px;letter-spacing:8px;cursor:pointer;font-family:'Noto Serif JP',serif;position:relative;padding:10px 0;transition:color .5s ease,letter-spacing .5s ease}.btn-donate::before{content:'';display:inline-block;width:24px;height:1px;background-color:var(--text-color);margin-right:16px;transition:width .8s cubic-bezier(.25, 1, .3, 1),background-color .5s ease}.btn-donate:hover{color:#888;letter-spacing:12px}.btn-donate:hover::before{width:80px;background-color:#888}#epilogue{height:100vh;position:relative;background:0 0}.epilogue-words{writing-mode:vertical-rl;font-size:clamp(14px, 3vw, 20px);letter-spacing:clamp(6px, 2vw, 12px);line-height:2.5;color:#444;opacity:0;filter:blur(20px);transform:translateY(40px);transition:opacity 4s ease .5s,filter 4s ease .5s,transform 4s ease .5s}.epilogue-brand{position:absolute;bottom:5vh;width:100%;text-align:center;opacity:0;filter:blur(10px);transition:opacity 3s ease 3s,filter 3s ease 3s}
-/* 👇 这里修改了 download-notice 并新增了手动跳转按钮的样式 👇 */
 .download-notice{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:12px;letter-spacing:4px;color:#666;opacity:0;transition:opacity 2s ease;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:16px}.reveal-epilogue.active .epilogue-words{opacity:1;filter:blur(0);transform:translateY(0)}.reveal-epilogue.active .epilogue-brand{opacity:1;filter:blur(0)}.reveal-epilogue.active .download-notice.show{opacity:1;pointer-events:auto}#manual-download-link{font-family:'Noto Serif JP',serif;font-size:10px;color:#777;letter-spacing:2px;text-decoration:none;border-bottom:1px solid #777;padding-bottom:2px;opacity:0;transition:opacity 1.5s ease;pointer-events:none;cursor:pointer}#manual-download-link.show{opacity:1;pointer-events:auto}#manual-download-link:hover{color:#333;border-color:#333}
 </style>
 <style>
@@ -99,6 +98,20 @@
   #gallery .reveal.active .cinema-shot img,
   #gallery .cinema-shot:hover img,
   #gallery .cinema-shot:focus-visible img{animation:none!important;clip-path:none!important;transform:none!important;filter:saturate(.66) contrast(.96) brightness(1.03)!important;object-position:center!important;backface-visibility:hidden;will-change:auto!important}
+}
+</style>
+
+<!-- 👇 修复了被误删的底部版权文字样式 👇 -->
+<style>
+.epilogue-brand .logo {
+    font-size: 12px;
+    letter-spacing: 8px;
+    margin-bottom: 12px;
+}
+.epilogue-brand .copy {
+    font-size: 10px;
+    color: #bbb;
+    letter-spacing: 2px;
 }
 </style>
 
@@ -226,7 +239,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 <div id="main-site">
 <header id="nav-header">
-<!-- 👇 导航栏调整了后日谈的位置 👇 -->
 <a href="#hero">首页</a> 
 <a href="#story">故事</a> 
 <a href="#gallery">画面</a> 
@@ -337,7 +349,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 </div>
 </section>
 
-<!-- ================= 后日谈区块 (破除对仗，回归纯粹独白) ================= -->
 <section id="afterstory">
     <div class="reveal">
         <h2 class="sec-title">後日談</h2>
@@ -354,8 +365,6 @@ document.addEventListener('DOMContentLoaded',()=>{
         </div>
     </div>
 </section>
-<!-- =================================================================== -->
-
 
 <section id="staff">
 <div class="reveal">
@@ -383,7 +392,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 <span class="staff-name">Luca_Rocky</span>
 </div>
 <div class="staff-item">
-<span class="staff-role>网站开发 / 程序编写</span>
+<span class="staff-role">网站开发 / 程序编写</span>
 <span class="staff-name">樱花不及伊蕾娜 / hello七七</span>
 </div>
 <div class="staff-item">
@@ -407,7 +416,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 </div>
 </section>
 
-<!-- 👇 在此处更新了 HTML 结构，加入了手动的备用下载链接 👇 -->
 <section id="epilogue" class="reveal-epilogue">
 <div class="epilogue-words" id="epilogue-text">——故事在这里落幕，<br>而你的旅程将从这一刻开始。</div>
 <div class="download-notice" id="download-notice">
@@ -447,7 +455,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 
         let isAudioPlaying = false, firstInteraction = false;
 
-        // 1. 开场碎星与文字聚散动画
         setTimeout(() => { introText.classList.add('show'); headphoneHint.classList.add('show'); }, 500);
 
         setTimeout(() => {
@@ -479,7 +486,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 
         }, 4000);
 
-        // 2. 音频点击控制
         function startAudio() {
             if (firstInteraction) return;
             firstInteraction = true;
@@ -505,7 +511,6 @@ document.addEventListener('DOMContentLoaded',()=>{
             else { bgm.play(); bgm.volume = 0.4; isAudioPlaying = true; audioControl.innerText = "SOUND : ON"; }
         });
 
-        // 3. 终章下载页控制 (加入了备用按钮显示逻辑)
         const epilogueObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && entry.intersectionRatio >= 0.9) {
@@ -521,11 +526,9 @@ document.addEventListener('DOMContentLoaded',()=>{
                             setTimeout(() => {
                                 downloadNotice.classList.add('show');
                                 
-                                // 👇 核心修改：在尝试自动跳转后，设定2秒的延迟展示手动链接 👇
                                 setTimeout(() => { 
                                     window.open(TARGET_URL, '_blank'); 
                                     
-                                    // 2秒后如果页面仍未被替换（即弹出被拦截），显示手动点击链接
                                     setTimeout(() => {
                                         const manualLink = document.getElementById('manual-download-link');
                                         if (manualLink) manualLink.classList.add('show');
