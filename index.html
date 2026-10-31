@@ -420,7 +420,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 <div class="epilogue-words" id="epilogue-text">——故事在这里落幕，<br>而你的旅程将从这一刻开始。</div>
 <div class="download-notice" id="download-notice">
     <div>[ Downloading Story... ]</div>
-    <a href="./download.html" target="_blank" id="manual-download-link">若未自动跳转，请点击此处下载</a>
+    <!-- 👇 去掉了 target="_blank"，改为当前页直接跳转 👇 -->
+    <a href="./download.html" id="manual-download-link">若未自动跳转，请点击此处下载</a>
 </div>
 <div class="epilogue-brand">
 <div class="logo">游戏 : 彼岸之外</div>
@@ -527,12 +528,13 @@ document.addEventListener('DOMContentLoaded',()=>{
                                 downloadNotice.classList.add('show');
                                 
                                 setTimeout(() => { 
-                                    window.open(TARGET_URL, '_blank'); 
+                                    // 👇 核心修改：改为当前窗口平滑跳转，彻底告别 about:blank 白屏 👇
+                                    window.location.href = TARGET_URL; 
                                     
                                     setTimeout(() => {
                                         const manualLink = document.getElementById('manual-download-link');
                                         if (manualLink) manualLink.classList.add('show');
-                                    }, 2000);
+                                    }, 1500);
                                     
                                 }, 1000);
                             }, 1500);
@@ -549,3 +551,4 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
